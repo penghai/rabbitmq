@@ -1,0 +1,5 @@
+- hosts: rabbitmq_nodes
+  vars_files:
+    - "vars/rabbitmq.yml"
+  roles:
+    - role: rabbitmq
