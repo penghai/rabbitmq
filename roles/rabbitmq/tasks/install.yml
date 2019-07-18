@@ -1,0 +1,22 @@
+- name: install rabbitmq package
+  yum:
+    name:
+      - rabbitmq-server-3.6.16
+      - erlang
+    state: present
+
+- name: config rabbitmq 
+  template:
+    src: config/{{item}}
+    dest: /etc/rabbitmq/{{item}}
+    owner: rabbitmq
+    group: rabbitmq
+  with_items:
+    - rabbitmq.config 
+    - rabbitmq-env.conf
+  notify: restart rabbitmq-server
+
+- name: Enable rabbitmq_management plugins
+  rabbitmq_plugin:
+    names: rabbitmq_management
+    state: enabled

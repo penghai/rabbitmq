@@ -1,0 +1,37 @@
+- name: copy /var/lib/rabbitmq/.erlang.cookie
+  copy:
+    src: erlang.cookie
+    dest: /var/lib/rabbitmq/.erlang.cookie
+    owner: rabbitmq
+    group: rabbitmq
+    mode: '0400'
+
+- name: start rabbitmq-server
+  service:
+    name: rabbitmq-server
+    state: started 
+    enabled: yes
+
+- name: create rabbitmq cluster stop_app
+  shell: rabbitmqctl stop_app 
+  when: ansible_hostname != (rabbitmq_cluste_init)
+
+- name: create rabbitmq cluster reset
+  shell: rabbitmqctl reset
+  when: ansible_hostname != (rabbitmq_cluste_init)
+
+- name: create rabbitmq cluster join_cluster
+  shell: rabbitmqctl join_cluster rabbit@{{rabbitmq_cluste_init}} 
+  when: ansible_hostname != (rabbitmq_cluste_init)
+
+- name: create rabbitmq cluster start_app
+  shell: rabbitmqctl start_app 
+  when: ansible_hostname != (rabbitmq_cluste_init)
+
+- name: set cluster policy
+  rabbitmq_policy:
+    name: HA
+    pattern: '^(?!amq\.).*'
+    tags:
+      ha-mode: all
+  run_once: true
