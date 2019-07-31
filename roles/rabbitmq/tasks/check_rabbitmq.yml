@@ -1,0 +1,29 @@
+- name: install xinetd package
+  yum:
+    name: xinetd
+    state: present
+
+- name: copy rabbitmqadmin file
+  copy:
+    src: rabbitmqadmin
+    dest: /usr/local/bin/rabbitmqadmin
+    mode: '0755'
+
+- name: copy rabbitmqcheck file
+  template:
+    src: rabbitmq_check.sh
+    dest: /usr/local/bin/rabbitmq_check.sh
+    mode: '0755'
+
+- name: add port   
+  lineinfile:
+    path: /etc/services
+    regexp: '^rabbitmqchk'
+    line: 'rabbitmqchk     49203/tcp'
+    insertafter: EOF
+
+- name: copy rabbitmqadmin file
+  copy:
+    src: rabbitmqchk
+    dest: /etc/xinetd.d/rabbitmqchk
+  notify: start xinetd

@@ -6,3 +6,5 @@
 - include: config_cluster.yml
 
 - include: config_user.yml
+
+- include: check_rabbitmq.yml

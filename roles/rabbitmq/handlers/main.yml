@@ -7,3 +7,8 @@
     state: restarted
     enabled: yes
 
+- name: start xinetd
+  service:
+    name: xinetd
+    state: restarted
+    enabled: yes
