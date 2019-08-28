@@ -1,12 +1,10 @@
 #!/bin/bash
 
-rabbitmqadmin -H {{ansible_ssh_host}} -u admin -p admin show overview > /dev/null 2>&1
+rabbitmqadmin -H {{ansible_ssh_host}} -u admin -p admin show overview > /dev/null 2>&1 
 if [[ $? == 0 ]];then
-    rabbitmqadmin -H {{ansible_ssh_host}} -u admin -p admin declare queue name={{ansible_ssh_host}}_test durable=true > /dev/null 2>&1
-    rabbitmqadmin -H {{ansible_ssh_host}} -u admin -p admin publish routing_key={{ansible_ssh_host}}_test payload="hello world" > /dev/null 2>&1
-    rabbitmqadmin -H {{ansible_ssh_host}} -u admin -p admin get queue={{ansible_ssh_host}}_test requeue=false > /dev/null 2>&1
-    rabbitmqadmin -H {{ansible_ssh_host}} -u admin -p admin delete queue name={{ansible_ssh_host}}_test > /dev/null 2>&1
-    rabbitmqadmin -H {{ansible_ssh_host}} -u admin -p admin purge queue name={{ansible_ssh_host}}_test > /dev/null 2>&1
+    rabbitmqadmin -H {{ansible_ssh_host}} -u admin -p admin declare queue name={{ansible_hostname}}_test durable=true > /dev/null 2>&1
+    rabbitmqadmin -H {{ansible_ssh_host}} -u admin -p admin publish routing_key={{ansible_hostname}}_test payload="hello world" > /dev/null 2>&1
+    rabbitmqadmin -H {{ansible_ssh_host}} -u admin -p admin get queue={{ansible_hostname}}_test requeue=false > /dev/null 2>&1
     if [[ $? == 0 ]];then
         echo -en "HTTP/1.1 200 OK\r\n"
         echo -en "Content-Type: text/plain\r\n"
