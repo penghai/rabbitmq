@@ -1,6 +1,5 @@
-
 rabbitmq_admin_port: 15672
 rabbitmq_node_prot: 5672
-rabbitmq_cluste_init: ph-test01
+rabbitmq_cluste_init: ph-node01
 rabbitmq_user: openstack
 rabbitmq_password: openstack
