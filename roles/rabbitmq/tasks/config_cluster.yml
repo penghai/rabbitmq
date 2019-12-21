@@ -12,20 +12,15 @@
     state: started 
     enabled: yes
 
-- name: create rabbitmq cluster stop_app
-  shell: rabbitmqctl stop_app 
-  when: ansible_hostname != (rabbitmq_cluste_init)
-
-- name: create rabbitmq cluster reset
-  shell: rabbitmqctl reset
-  when: ansible_hostname != (rabbitmq_cluste_init)
-
-- name: create rabbitmq cluster join_cluster
-  shell: rabbitmqctl join_cluster rabbit@{{rabbitmq_cluste_init}} 
-  when: ansible_hostname != (rabbitmq_cluste_init)
-
-- name: create rabbitmq cluster start_app
-  shell: rabbitmqctl start_app 
+- block:
+  - name: create rabbitmq cluster stop_app
+    shell: rabbitmqctl stop_app 
+  - name: create rabbitmq cluster reset
+    shell: rabbitmqctl reset
+  - name: create rabbitmq cluster join_cluster
+    shell: rabbitmqctl join_cluster rabbit@{{rabbitmq_cluste_init}} 
+  - name: create rabbitmq cluster start_app
+    shell: rabbitmqctl start_app 
   when: ansible_hostname != (rabbitmq_cluste_init)
 
 - name: set cluster policy
